@@ -1,55 +1,117 @@
-# ⚙️ **Cost Function Sensitivity in Predictive Simulations for Assistive Device Design**
+# 🚶‍♂️ Assistive Device Design: 2D Walking Simulation & Analysis
 
----
+This repository contains a comprehensive framework for analyzing and simulating human gait, with applications in assistive device design. The project combines experimental gait analysis, synthetic gait generation, and comparative analysis tools to provide insights into human locomotion patterns.
 
-## 📜 **Summary**
+## 📋 Project Components
 
-This project investigates the impact of **cost functions** on predictive simulations used in the design of **assistive devices**, with a focus on human walking simulations in **OpenSim Moco**. The study explores how choices in cost functions can influence simulation outcomes, which is critical when designing devices such as **exoskeletons** or **prostheses**. By examining the sensitivity of key design parameters, like **torque** and **power requirements**, to different cost functions, this project aims to improve the accuracy and reliability of assistive device simulations.
+### 1. Experimental Gait Analysis (`sims/experimental_gait_analysis.py`)
+- Processes and analyzes experimental gait data from OpenSim tracking files
+- Extracts joint angles (hip, knee, ankle) and ground reaction forces
+- Generates detailed visualizations of gait parameters
+- Supports both raw time series and normalized gait cycle analysis
 
-💡 **Significance:** The sensitivity of predictive simulations to cost functions plays a crucial role in determining the performance of assistive devices, making it essential to evaluate these functions thoroughly during the design process.
+### 2. Synthetic Gait Generation (`sims/synthetic_gait.py`)
+- Generates biomechanically realistic gait patterns
+- Produces joint kinematics and ground reaction forces
+- Implements physiologically accurate timing of gait phases
+- Creates smooth, continuous motion patterns
 
----
+### 3. Comparative Analysis (`sims/compare_gait_analyses.py`)
+- Compares experimental and synthetic gait data
+- Provides quantitative metrics for evaluation
+- Generates side-by-side visualizations
+- Supports time-normalized comparisons
 
-## 🎯 **Objective**
-> To explore how varying cost functions impact the results of predictive simulations in assistive device design.
+## 📊 Generated Visualizations
 
----
+### Experimental Data Analysis
+![Experimental Gait Analysis](results/experimental_gait_analysis.png)
+*Comprehensive visualization of experimental gait data showing joint angles and ground reaction forces over time. The plots display hip, knee, and ankle joint angles (top three panels) and ground reaction forces (bottom panel) during a complete gait cycle.*
 
-## 🛠 **Skills Required**
+![Joint Angles](results/experimental_joint_angles.png)
+*Detailed view of experimental joint angles for hip, knee, and ankle joints. Each curve represents the angular motion of the respective joint throughout the gait cycle, providing insights into joint coordination patterns.*
 
-### **Technical Skills**
+![Ground Forces](results/experimental_ground_forces.png)
+*Ground reaction forces from experimental data showing both vertical and anterior-posterior components. These forces represent the interaction between the foot and the ground during walking.*
 
-![OpenSim](https://img.shields.io/badge/-OpenSim-3498DB?style=for-the-badge&logo=opensim&logoColor=white)
-![Optimization](https://img.shields.io/badge/-Optimization%20Techniques-2E8B57?style=for-the-badge&logoColor=white)
-![Musculoskeletal Modeling](https://img.shields.io/badge/-Musculoskeletal%20Modeling-FF6F00?style=for-the-badge&logoColor=white)
-![Data Analysis](https://img.shields.io/badge/-Data%20Analysis-6A5ACD?style=for-the-badge&logo=data&logoColor=white)
+### Comparative Analysis
+![Combined Analysis](results/combined_gait_analysis.png)
+*Side-by-side comparison of experimental and synthetic gait data. This visualization allows direct comparison of joint kinematics and ground reaction forces between the experimental measurements and our synthetic model predictions.*
 
-- **Musculoskeletal Modeling**
-- **Optimization Techniques**
-- **Biomechanics Simulation Tools** (OpenSim Moco)
-- **Data Analysis and Interpretation**
+### Additional Analyses
+![Muscle Activations](results/muscle_activations.png)
+*Muscle activation patterns during the gait cycle, showing the timing and magnitude of major muscle group activations during walking.*
 
-### **Soft Skills**
+## 🛠 Installation & Setup
 
-- 🧠 **Problem-Solving & Analytical Thinking**
-- 🔍 **Attention to Detail**
-  
----
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/Assistive-Device-Design.git
+cd Assistive-Device-Design
+```
 
-## 📊 **Deliverables**
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-### **Key Outputs**
+## 📈 Usage
 
-- 🧩 **Predictive Simulation Models**: Models simulating human gait and assistive devices.
-- 📈 **Comparative Analysis**: Outcomes based on different cost functions.
-- 📊 **Reports on Device Parameters**: Including torque and power requirements.
-- 🎨 **Visualizations**: Gait patterns and simulation results.
+### Running Experimental Analysis
+```python
+from sims.experimental_gait_analysis import ExperimentalGaitAnalyzer
 
----
+analyzer = ExperimentalGaitAnalyzer()
+analyzer.load_data('path/to/grf_file.sto', 'path/to/state_file.sto')
+analyzer.plot_results()
+```
 
-## 🔍 **Additional Information**
+### Generating Synthetic Data
+```python
+from sims.synthetic_gait import SyntheticGaitGenerator
 
-- **Software Used**: OpenSim Moco for predictive simulations.
-- **Model Details**: Bilaterally symmetric models assuming planar motion.
-- **Device Comparisons**: Includes assistive devices for the **hip**, **knee**, and **ankle**.
-- **Future Work**: This study can be extended to analyze gait under different conditions, such as **varying speeds** and **inclines**.
+generator = SyntheticGaitGenerator()
+synthetic_data = generator.generate_complete_gait_dataset()
+```
+
+### Comparing Data
+```python
+from sims.compare_gait_analyses import GaitAnalysisComparator
+
+comparator = GaitAnalysisComparator()
+comparator.load_experimental_data()
+comparator.generate_synthetic_data()
+comparator.plot_comparison()
+```
+
+## 📚 Data Structure
+
+The repository is organized as follows:
+```
+.
+├── sims/                      # Simulation and analysis scripts
+│   ├── experimental_gait_analysis.py
+│   ├── synthetic_gait.py
+│   └── compare_gait_analyses.py
+├── results/                   # Generated visualizations and data
+│   ├── experimental_*.png     # Experimental analysis plots
+│   ├── synthetic_*.png       # Synthetic data plots
+│   └── comparison_*.png      # Comparative analysis plots
+├── data/                      # Raw data directory
+│   └── cost_function_sensitivity_results/
+└── requirements.txt           # Project dependencies
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- OpenSim community for their excellent tools and documentation
+- Contributors to the biomechanics research community
+- Original authors of the cost function sensitivity analysis study
