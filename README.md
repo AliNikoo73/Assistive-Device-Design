@@ -56,6 +56,24 @@ plotter.plot_joint_angles(results)
 plotter.plot_ground_forces(results)
 ```
 
+### Example Scripts
+
+We provide several example scripts in the `examples/` directory:
+
+- **basic_simulation_moco.py**: Run a simple walking simulation using OpenSim Moco
+- **compare_cost_functions.py**: Compare different cost functions (muscle effort, joint torque, hybrid)
+- **analyze_opensim_results.py**: Analyze and visualize existing OpenSim simulation results
+- **batch_processing.py**: Run multiple simulations with different parameters
+- **assistive_device_optimization.py**: Optimize assistive device parameters
+- **custom_cost_function.py**: Create and use custom cost functions
+
+To run an example:
+
+```bash
+cd examples
+python basic_simulation_moco.py
+```
+
 ### Adding an Assistive Device
 
 ```python
