@@ -1,105 +1,160 @@
-# 🚶‍♂️ Assistive Device Design: 2D Walking Simulation & Analysis
+# 🚶‍♂️ GaitSim Assist: A Python Library for Gait Simulations and Assistive Device Design
 
-This repository contains a comprehensive framework for analyzing and simulating human gait, with applications in assistive device design. The project combines experimental gait analysis, synthetic gait generation, and comparative analysis tools to provide insights into human locomotion patterns.
+GaitSim Assist is a comprehensive Python library for biomechanics researchers and wearable device engineers. It provides a high-level API for running gait simulations, testing assistive device parameters, and optimizing cost function settings without deep diving into low-level OpenSim code.
 
-## 📋 Project Components
+## 🌟 Features
 
-### 1. Experimental Gait Analysis (`sims/experimental_gait_analysis.py`)
-- Processes and analyzes experimental gait data from OpenSim tracking files
-- Extracts joint angles (hip, knee, ankle) and ground reaction forces
-- Generates detailed visualizations of gait parameters
-- Supports both raw time series and normalized gait cycle analysis
+- **Unified Gait Simulation API**: High-level Python APIs to load gait datasets, run simulations (tracking or predictive), and retrieve joint kinematics & kinetics results.
+- **Cost Function Modules**: Built-in library of cost functions (metabolic cost, fatigue, effort, etc.) that can be swapped or combined to see how assistive outcomes change.
+- **Assistive Device Modeling**: Tools to model simple assistive device effects (like exoskeleton torques or prosthetic joint limits) and incorporate them into simulations.
+- **Visualization & Analysis**: Automatic generation of gait plots – joint angle curves, ground reaction forces, muscle activations – for both experimental and synthetic gait data.
 
-### 2. Synthetic Gait Generation (`sims/synthetic_gait.py`)
-- Generates biomechanically realistic gait patterns
-- Produces joint kinematics and ground reaction forces
-- Implements physiologically accurate timing of gait phases
-- Creates smooth, continuous motion patterns
+## 📋 Installation
 
-### 3. Comparative Analysis (`sims/compare_gait_analyses.py`)
-- Compares experimental and synthetic gait data
-- Provides quantitative metrics for evaluation
-- Generates side-by-side visualizations
-- Supports time-normalized comparisons
+### Using pip
 
-## 📊 Generated Visualizations
+```bash
+pip install gaitsim-assist
+```
 
-### Experimental Data Analysis
-![Experimental Gait Analysis](results/experimental_gait_analysis.png)
-*Comprehensive visualization of experimental gait data showing joint angles and ground reaction forces over time. The plots display hip, knee, and ankle joint angles (top three panels) and ground reaction forces (bottom panel) during a complete gait cycle.*
+### From source
 
+```bash
+git clone https://github.com/yourusername/gaitsim-assist.git
+cd gaitsim-assist
+pip install -e .
+```
+
+### Dependencies
+
+GaitSim Assist requires:
+- Python 3.9+
+- OpenSim 4.3+
+- NumPy, Matplotlib, Pandas, SciPy
+- CasADi (for optimization)
+
+## 🚀 Quick Start
+
+### Basic Simulation
+
+```python
+import gaitsim_assist as gsa
+
+# Create a simulator with default 2D walking model
+simulator = gsa.GaitSimulator()
+
+# Run a predictive simulation with cost of transport cost function
+results = simulator.run_predictive_simulation(
+    cost_function='cot',
+    time_range=(0.0, 1.0)
+)
+
+# Visualize the results
+from gaitsim_assist.visualization import GaitPlotter
+plotter = GaitPlotter()
+plotter.plot_joint_angles(results)
+plotter.plot_ground_forces(results)
+```
+
+### Adding an Assistive Device
+
+```python
+# Create an ankle exoskeleton
+exo = gsa.devices.Exoskeleton(
+    name="ankle_exo",
+    model=simulator.model,
+    joint_name="ankle",
+    mass=1.0,
+    max_torque=50.0
+)
+
+# Run simulation with the exoskeleton
+exo_results = simulator.run_predictive_simulation(
+    cost_function='cot',
+    time_range=(0.0, 1.0),
+    assistive_device=exo
+)
+```
+
+### Comparing Different Cost Functions
+
+```python
+# Create a hybrid cost function
+hybrid_cost = gsa.cost_functions.Hybrid(
+    simulator.model,
+    cost_functions={
+        'cot': 0.5,
+        'muscle_effort': 0.5
+    }
+)
+
+# Run simulation with the hybrid cost function
+hybrid_results = simulator.run_predictive_simulation(
+    cost_function=hybrid_cost,
+    time_range=(0.0, 1.0)
+)
+
+# Compare results
+plotter.compare_simulations(
+    results_list=[results, exo_results, hybrid_results],
+    labels=["Baseline", "Exoskeleton", "Hybrid Cost"],
+    plot_type="joint_angles"
+)
+```
+
+## 📊 Example Visualizations
+
+### Joint Angles
 ![Joint Angles](results/experimental_joint_angles.png)
-*Detailed view of experimental joint angles for hip, knee, and ankle joints. Each curve represents the angular motion of the respective joint throughout the gait cycle, providing insights into joint coordination patterns.*
+*Detailed view of joint angles for hip, knee, and ankle joints throughout the gait cycle.*
 
+### Ground Reaction Forces
 ![Ground Forces](results/experimental_ground_forces.png)
-*Ground reaction forces from experimental data showing both vertical and anterior-posterior components. These forces represent the interaction between the foot and the ground during walking.*
+*Ground reaction forces showing both vertical and anterior-posterior components during walking.*
 
-### Comparative Analysis
-![Combined Analysis](results/combined_gait_analysis.png)
-*Side-by-side comparison of experimental and synthetic gait data. This visualization allows direct comparison of joint kinematics and ground reaction forces between the experimental measurements and our synthetic model predictions.*
-
-### Additional Analyses
+### Muscle Activations
 ![Muscle Activations](results/muscle_activations.png)
 *Muscle activation patterns during the gait cycle, showing the timing and magnitude of major muscle group activations during walking.*
 
-## 🛠 Installation & Setup
+## 📚 Documentation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/Assistive-Device-Design.git
-cd Assistive-Device-Design
+For full documentation, visit [docs.gaitsim-assist.org](https://docs.gaitsim-assist.org).
+
+### Tutorials
+
+- [Getting Started](https://docs.gaitsim-assist.org/tutorials/getting_started.html)
+- [Creating Custom Cost Functions](https://docs.gaitsim-assist.org/tutorials/custom_cost_functions.html)
+- [Modeling Assistive Devices](https://docs.gaitsim-assist.org/tutorials/assistive_devices.html)
+- [Analyzing Simulation Results](https://docs.gaitsim-assist.org/tutorials/analysis.html)
+
+## 🛠 Project Structure
+
 ```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## 📈 Usage
-
-### Running Experimental Analysis
-```python
-from sims.experimental_gait_analysis import ExperimentalGaitAnalyzer
-
-analyzer = ExperimentalGaitAnalyzer()
-analyzer.load_data('path/to/grf_file.sto', 'path/to/state_file.sto')
-analyzer.plot_results()
-```
-
-### Generating Synthetic Data
-```python
-from sims.synthetic_gait import SyntheticGaitGenerator
-
-generator = SyntheticGaitGenerator()
-synthetic_data = generator.generate_complete_gait_dataset()
-```
-
-### Comparing Data
-```python
-from sims.compare_gait_analyses import GaitAnalysisComparator
-
-comparator = GaitAnalysisComparator()
-comparator.load_experimental_data()
-comparator.generate_synthetic_data()
-comparator.plot_comparison()
-```
-
-## 📚 Data Structure
-
-The repository is organized as follows:
-```
-.
-├── sims/                      # Simulation and analysis scripts
-│   ├── experimental_gait_analysis.py
-│   ├── synthetic_gait.py
-│   └── compare_gait_analyses.py
-├── results/                   # Generated visualizations and data
-│   ├── experimental_*.png     # Experimental analysis plots
-│   ├── synthetic_*.png       # Synthetic data plots
-│   └── comparison_*.png      # Comparative analysis plots
-├── data/                      # Raw data directory
-│   └── cost_function_sensitivity_results/
-└── requirements.txt           # Project dependencies
+gaitsim_assist/
+├── __init__.py
+├── simulation/           # Core simulation capabilities
+│   ├── __init__.py
+│   ├── gait_simulator.py
+│   ├── tracking.py
+│   └── predictive.py
+├── cost_functions/       # Cost function implementations
+│   ├── __init__.py
+│   ├── base.py
+│   ├── cot.py
+│   ├── muscle_effort.py
+│   └── ...
+├── devices/              # Assistive device models
+│   ├── __init__.py
+│   ├── base.py
+│   ├── exoskeleton.py
+│   └── ...
+├── visualization/        # Visualization tools
+│   ├── __init__.py
+│   ├── gait_plotter.py
+│   └── ...
+└── analysis/             # Analysis tools
+    ├── __init__.py
+    └── ...
 ```
 
 ## 🤝 Contributing
@@ -114,4 +169,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - OpenSim community for their excellent tools and documentation
 - Contributors to the biomechanics research community
-- Original authors of the cost function sensitivity analysis study

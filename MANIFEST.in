@@ -1,0 +1,17 @@
+include LICENSE
+include README.md
+include requirements.txt
+include environment.yml
+
+recursive-include gaitsim_assist/models *.osim
+recursive-include gaitsim_assist/data *.csv *.json
+recursive-include examples *.py
+recursive-include docs *.rst *.py *.txt *.html *.css *.js
+recursive-include tests *.py
+
+prune venv
+prune .git
+prune .github
+prune .pytest_cache
+prune __pycache__
+global-exclude *.py[cod] __pycache__ *.so *.dylib .DS_Store 
